@@ -1,8 +1,8 @@
-# Game of Life
+## Game of Life
 
 An implementation of Conway's Game of Life.
 
-## Building and running on localhost
+### Building and running on localhost
 
 First install dependencies:
 
@@ -22,10 +22,10 @@ To create a production build:
 npm run build-prod
 ```
 
-## Running
+### Running
 
 Open the file `dist/index.html` in your browser
 
-## Credits
+### Credits
 
 Made with [createapp.dev](https://createapp.dev/)
