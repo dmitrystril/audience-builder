@@ -1,6 +1,6 @@
-# empty-project
+# Game of Life
 
-Empty project.
+An implementation of Conway's Game of Life.
 
 ## Building and running on localhost
 
