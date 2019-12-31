@@ -4,26 +4,14 @@ import styled from 'styled-components';
 import Canvas from './Canvas';
 
 const Root = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const BasicPane = styled.div`
-  width: 250px;
-  height: 550px;
-  border: 2px dashed lightgray;
+  width: 100%;
+  height: 100%;
 `;
 
 const App = () => {
   return (
     <Root>
-      <BasicPane />
-
-      <Canvas
-        height={300}
-      />
-
-      <BasicPane />
+      <Canvas />
     </Root>
   );
 }

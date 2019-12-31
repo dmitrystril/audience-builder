@@ -1,17 +1,20 @@
 import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 
-interface CanvasProps {
-  width: number;
-  height: number;
-}
-
 const CustomCanvas = styled.canvas`
   border: 2px dashed blue;
-  margin: 0 20px;
+  background-color: red;
+  width: calc(100% - 44px);
+  height: calc(100% - 44px);
+  margin: 20px;
 `;
 
-const Canvas = ({ width, height }: CanvasProps) => {
+const drawCanvas = (context: CanvasRenderingContext2D) => {
+  context.fillStyle = 'lightblue';
+  context.fillRect(10, 10, 100, 100);
+}
+
+const Canvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -22,23 +25,15 @@ const Canvas = ({ width, height }: CanvasProps) => {
 
     const context = canvas.getContext('2d');
     if (context) {
-      context.fillStyle = 'lightblue';
-      context.fillRect(10, 10, 150, 100);
+      // canvas.width = window.innerWidth;
+      // canvas.height = window.innerHeight;
+      drawCanvas(context);
     }
   }, []);
 
   return (
-    <CustomCanvas
-      ref={canvasRef}
-      height={height}
-      width={width}
-    />
+    <CustomCanvas ref={canvasRef} />
   );
-};
-
-Canvas.defaultProps = {
-  width: window.innerWidth - 500,
-  height: window.innerHeight,
 };
 
 export default Canvas;
