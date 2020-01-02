@@ -1,17 +1,21 @@
 import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 
+const TOTAL_MARGIN = 44;
+
 const CustomCanvas = styled.canvas`
   border: 2px dashed blue;
   background-color: red;
-  width: calc(100% - 44px);
-  height: calc(100% - 44px);
   margin: 20px;
 `;
 
 const drawCanvas = (context: CanvasRenderingContext2D) => {
+  context.lineWidth = 1;
+  context.strokeStyle = "blue";
+  context.rect(5, 5, 290, 140);
   context.fillStyle = 'lightblue';
-  context.fillRect(10, 10, 100, 100);
+  context.fillRect(5, 5, 290, 140);
+  context.stroke();
 }
 
 const Canvas = () => {
@@ -25,8 +29,10 @@ const Canvas = () => {
 
     const context = canvas.getContext('2d');
     if (context) {
-      // canvas.width = window.innerWidth;
-      // canvas.height = window.innerHeight;
+      let parentWidth = canvasRef?.current?.parentElement?.clientWidth;
+      let parentHeight = canvasRef?.current?.parentElement?.clientHeight || 600;
+      canvas.width = parentWidth ? parentWidth - TOTAL_MARGIN : 800;
+      canvas.height = parentHeight ? parentHeight - TOTAL_MARGIN : 800;
       drawCanvas(context);
     }
   }, []);
