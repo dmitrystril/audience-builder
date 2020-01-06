@@ -1,22 +1,11 @@
 import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 
-const TOTAL_MARGIN = 44;
+import Game from './Game';
 
 const CustomCanvas = styled.canvas`
-  border: 2px dashed blue;
-  background-color: red;
-  margin: 20px;
+  background-color: black;
 `;
-
-const drawCanvas = (context: CanvasRenderingContext2D) => {
-  context.lineWidth = 1;
-  context.strokeStyle = "blue";
-  context.rect(5, 5, 290, 140);
-  context.fillStyle = 'lightblue';
-  context.fillRect(5, 5, 290, 140);
-  context.stroke();
-}
 
 const Canvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -25,16 +14,29 @@ const Canvas = () => {
     if (!canvasRef.current) {
       return;
     }
-    const canvas: HTMLCanvasElement = canvasRef.current;
 
+    const canvas: HTMLCanvasElement = canvasRef.current;
     const context = canvas.getContext('2d');
+
+    let game: Game;
+
     if (context) {
       let parentWidth = canvasRef?.current?.parentElement?.clientWidth;
-      let parentHeight = canvasRef?.current?.parentElement?.clientHeight || 600;
-      canvas.width = parentWidth ? parentWidth - TOTAL_MARGIN : 800;
-      canvas.height = parentHeight ? parentHeight - TOTAL_MARGIN : 800;
-      drawCanvas(context);
+      let parentHeight = canvasRef?.current?.parentElement?.clientHeight;
+
+      const canvasWidth = parentWidth ? parentWidth : 800;
+      const canvasHeight = parentHeight ? parentHeight : 600;
+
+      canvas.width = canvasWidth;
+      canvas.height = canvasHeight;
+
+      game = new Game(context, canvasWidth, canvasHeight, 12, 15, 100);
+      game.start();
     }
+
+    return () => {
+      game.end();
+    };
   }, []);
 
   return (
