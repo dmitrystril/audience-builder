@@ -20,7 +20,7 @@ const Canvas = () => {
     }
 
     const canvas: HTMLCanvasElement = canvasRef.current;
-    const context = canvas.getContext('2d');
+    const context = canvas.getContext('2d', { alpha: false });
 
     let game: Game;
 

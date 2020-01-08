@@ -16,13 +16,15 @@ class Game {
   private initialExistenceProbability: number;
   private generationInterval: number;
   private intervalId: number = NaN;
+  private generationNumber = 0;
+  private aliveCellsAmount = 0;
 
   constructor(
     context: CanvasRenderingContext2D,
     resolution: Resolution,
     cellSize = 12,
     initialExistenceProbability = 15,
-    generationInterval: number = 100,
+    generationInterval: number = 1000,
   ) {
     this.context = context;
     this.rowAmount = resolution.height / cellSize;
@@ -55,21 +57,32 @@ class Game {
       matrix.push(innerArray);
     }
 
+    this.generationNumber++;
+
     return matrix;
   }
 
   private nextMatrix = (gameMatrix: Array2D) => {
+    this.aliveCellsAmount = 0;
+
     for (let i = 0; i < this.columnAmount; i++) {
       for (let k = 0; k < this.rowAmount; k++) {
         const adjucentAliveCellsCount = this.getNumberOfAdjucentAliveCells(gameMatrix, i, k);
 
         if (this.shouldCellRevive(gameMatrix[i][k], adjucentAliveCellsCount)) {
           gameMatrix[i][k] = 1;
+          this.aliveCellsAmount++;
         } else if (this.shouldCellDie(gameMatrix[i][k], adjucentAliveCellsCount)) {
           gameMatrix[i][k] = 0;
         }
+
+        if (gameMatrix[i][k] === 1) {
+          this.aliveCellsAmount++;
+        }
       }
     }
+
+    this.generationNumber++;
 
     return gameMatrix;
   };
@@ -98,7 +111,7 @@ class Game {
   }
 
   private inArray = (gameMatrix: Array2D, x: number, y: number) => {
-    return (x >= 0 && x <= gameMatrix.length) && (y >= 0 && y <= gameMatrix[x].length);
+    return (x >= 0 && x <= gameMatrix.length - 1) && (y >= 0 && y <= gameMatrix[x].length - 1);
   }
 
   private drawScene = (gameMatrix: Array2D) => {
@@ -107,6 +120,8 @@ class Game {
         this.drawCell(i * this.cellSize, k * this.cellSize, gameMatrix[i][k]);
       }
     }
+
+    this.drawStats();
   }
 
   private drawCell = (
@@ -118,7 +133,15 @@ class Game {
     this.context.fillStyle = (state === 0 ? Game.DEAD_CELL_COLOR : Game.ALIVE_CELL_COLOR);
     this.context.arc(x + this.cellSize / 2, y + this.cellSize / 2, this.cellSize / 2, 0, 2 * Math.PI, false);
     this.context.fill();
-    this.context.stroke();
+  }
+
+  private drawStats = () => {
+    this.context.fillStyle = '#000000';
+    this.context.fillRect(20, 30, 250, 70);
+    this.context.font = '24px Verdana';
+    this.context.fillStyle = '#FFFFFF';
+    this.context.fillText('Generation: ' + this.generationNumber, 30, 60);
+    this.context.fillText('Cells: ' + this.aliveCellsAmount, 30, 90);
   }
 
   public end = () => {
