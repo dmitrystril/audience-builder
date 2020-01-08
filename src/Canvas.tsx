@@ -9,6 +9,10 @@ const CustomCanvas = styled.canvas`
 
 const Canvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const DEFAULT_RESOLUTION = {
+    width: 800,
+    height: 600,
+  };
 
   useEffect(() => {
     if (!canvasRef.current) {
@@ -24,13 +28,19 @@ const Canvas = () => {
       let parentWidth = canvasRef?.current?.parentElement?.clientWidth;
       let parentHeight = canvasRef?.current?.parentElement?.clientHeight;
 
-      const canvasWidth = parentWidth ? parentWidth : 800;
-      const canvasHeight = parentHeight ? parentHeight : 600;
+      const canvasWidth = parentWidth ? parentWidth : DEFAULT_RESOLUTION.width;
+      const canvasHeight = parentHeight ? parentHeight : DEFAULT_RESOLUTION.height;
 
       canvas.width = canvasWidth;
       canvas.height = canvasHeight;
 
-      game = new Game(context, canvasWidth, canvasHeight, 12, 15, 100);
+      game = new Game(
+        context,
+        {
+          width: canvasWidth,
+          height: canvasHeight,
+        },
+      );
       game.start();
     }
 
